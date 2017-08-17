@@ -92,61 +92,6 @@ def label_content(data_filepth ="../res/data/已完成标注（6818）.txt"):
     data = tools.read_txt(data_filepth)
     return content_preprocess(data)
 
-def save_label_no_line_result(lnl_res,save_path = "../res/labeled_data/lnline.csv"):
-    content = [["label","article_no","line"]]
-    for l in lnl_res.keys():
-        for n in lnl_res[l].keys():
-            for line in lnl_res[l][n]:
-                content.append([l,n,line])
-    tools.save_txt(save_path,content)
-
-def save_no_label_line_result(nll_res,save_path = "../res/labeled_data/nlline_data.csv"):
-    content =[["article_no,label","line"]]
-    for n in nll_res.keys():
-        for l in nll_res[n].keys():
-            for line in nll_res[n][l]:
-                content.append([n,l,line])
-    tools.save_txt(save_path,content)
-
-def save_label_data(ll_res,save_path = "../res/labeled_data/label_data.csv"):
-    content = [["label","line"]]
-    for l in ll_res:
-        for line in ll_res[l]:
-            content.append([l,line])
-    tools.save_txt(save_path,content)
-
-### data_file: 标注文件（nlline_data）
-### train_file: 切分后的训练文件保存地址
-### test_file: 切分后的测试文件保存地址
-### rate: 切分比例（训练数据/总体数据）
-### shuffle:是否打乱
-def seperate_data_by_instrument(data_file,train_file,test_file,rate = 0.75,shuffle = False):
-    content = tools.read_txt(data_file).strip().split("\n")
-    content.pop(0)
-    data ={}
-    id = []
-    train_data,test_data=[],[]
-    for line in content:
-        line = line.split(",",maxsplit=3)
-        if line[0] not in data.keys():
-            data[line[0]] = []
-        data[line[0]].append(line[1:])
-        id.append(line[0])
-    train_size = int(len(data)*rate)
-    test_size = int(len(data)-train_size)
-    if shuffle:
-        random.shuffle(id)
-    for no in id[:train_size]:
-        for var in data[no]:
-            train_data.append([no]+var)
-    for no in id[-test_size:]:
-        for var in data[no]:
-            test_data.append([no] + var)
-    tools.save_txt(train_file,train_data)
-    tools.save_txt(test_file,test_data)
-### data_file : 标注的文件(lnline.csv)
-### train_file: 切分后训练文件的保存地址
-### test_file: 切分后测试文件的保存地址
 def seperate_data_by_label(data_file,train_file,test_file,rate = 0.75,shuffle = False):
     content = tools.read_txt(data_file).strip().split("\n")
     content.pop(0)
@@ -174,17 +119,6 @@ def seperate_data_by_label(data_file,train_file,test_file,rate = 0.75,shuffle = 
         tools.save_txt(test_file,test_data)
     return train_data,test_data
 
-def test_seperate_label():
-    data_file = "../res/labeled_data/label_data.csv"
-    train_file = "../res/seperated_data/train_label.csv"
-    test_file = "../res/seperated_data/test_label.csv"
-    seperate_data_by_label(data_file,train_file,test_file)
-
-def test_seperate_id():
-    data_file = "../res/labeled_data/nlline_data.csv"
-    train_file = "../res/seperated_data/train_id.csv"
-    test_file = "../res/seperated_data/test_id.csv"
-    seperate_data_by_instrument(data_file,train_file,test_file)
 
 def csv2arff_file(featured_data,arff_file,arff_title = None):
     labels = []

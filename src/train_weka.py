@@ -74,23 +74,6 @@ def analyze(weka_result):
         report.append([map_label(line[-1]),line[2],line[3],line[4],str(sum(matrix[i][1:]))])
     return report,matrix
 
-def get_labels(label_file = "../res/parameter/labels.txt"):
-    content=tools.read_lines(label_file)
-    labels =[]
-    for line in content:
-        labels.append(line.strip())
-    return labels
-labels = get_labels()
-
-def map_label(label):
-    if label.isdigit():
-        index = int(label)
-    else:
-        return "Not digit"
-    if index>=0 and index<len(labels):
-        return labels[index]
-    else:
-        return "Not in the labels"
 
 def predict(model_name,model_file, test_file):
     if model_name in predict_parameter.keys():
@@ -198,12 +181,6 @@ def test_model(models_root,test_file,save_root):
     # return save_root
 
 if __name__ == "__main__":
-    # train_nltk(arff_file="../res/arff_data/新希望.csv.arff")
-    # print(java_path)
-    # print(weka_path)
-    # train_model(train_file="../res/arff_data/train/大西洋.csv.arff",save_root="../res/model/大西洋/")
-    # print(['C:\\Program Files\\Java\\jdk1.8.0_65\\bin\\java.exe', '-cp', '../res/parameter/weka.jar', 'weka.classifiers.trees.RandomForest', '-p', '15', '-l', '../res/model/大西洋/NaiveBayes.model', '-T', '../res/arff_data/train/大西洋.csv.arff'])
-    # train_model(train_file="../res/weka/train_less.arff",save_root="../res/weka/model/")
     filepath = "../res/model/model_result/BayesNet"
     content = tools.read_txt(filepath)
     # print(content)

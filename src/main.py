@@ -8,7 +8,6 @@ import re
 
 project_dir = os.path.abspath("../").replace("\\","/")
 
-# fea.load_parameter()
 class classify():
     def __init__(self,model_name,model_dir):
         self.model_name = model_name
@@ -63,15 +62,12 @@ class classify():
     def analyze_predict_result (self,feature_data,result):
         result = result.strip()
         predict_start = "prediction ()"
-        # print(result)
         start = result.index(predict_start) + len(predict_start)
         content = result[start:].strip()
-        # print(content)
         res =[]
         content = content.split("\n")
         for i in range(len(content)):
             line = content[i].replace("+","")
-        # for line in content.split("\n"):
             line = re.split(" +", line.strip())
             pre_label = int(line[2][line[2].index(":") + 1:].strip())
             pre = self.fea.get_label_name(pre_label)
@@ -79,12 +75,9 @@ class classify():
         return res
 
     def predict(self,text):
-        # labeled_data = pre.labeled_data(text)
         labeled_data = pre.label_content_data(text)
-        # print(labeled_data)
         feature_data = self.fea.feature_labeled_data(labeled_data)
         self.fea.arff_featured_data(feature_data,self.tmp_arff)
-        # print(feature_data)
         result = trainweka.predict(self.model_name,self.model_path,self.tmp_arff)
         return self.analyze_predict_result(feature_data,result)
 
@@ -92,7 +85,7 @@ if __name__=="__main__":
     print(project_dir)
     model_name ="RandomForest"
     train_file = project_dir+"/res/data/已完成标注（6818）.txt"
-    model_dir = project_dir+"/res/test_main/"
+    model_dir = project_dir+"/res/model/"
     cls = classify(model_name,model_dir)
     cls.train(train_file)
     cls.save_model()
@@ -102,4 +95,3 @@ if __name__=="__main__":
     res = cls.predict(text)
     for line in res:
         print(line)
-    # train(model_name,train_file,model_path)
